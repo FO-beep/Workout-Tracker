@@ -53,7 +53,10 @@ const workoutSchema = new Schema({
 });
 
 
-
+workoutSchema.methods.workoutDay = function () {
+    this.day = Date.now();
+    return this.day;
+}
 
 const Workout = mongoose.model("Workout", workoutSchema);
 

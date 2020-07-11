@@ -22,8 +22,8 @@ router.get("/stats", function (req, res) {
 
 // this collects/retrieves all workouts from the dattabase
 router.get("/api/workouts", (req, res) => {
-    db.Workout.find({}).then((dbWorkout) => {
-            res.json(dbWorkout);
+    db.Workout.find({}).then((data) => {
+            res.json(data);
         })
 
         .catch(err => {
@@ -34,8 +34,8 @@ router.get("/api/workouts", (req, res) => {
 
 // this collects/retrieves all workouts within a range from the dattabase.
 router.get("/api/workouts/range", (req, res) => {
-    db.Workout.find({}).then(dbWorkout => {
-            res.json(dbWorkout);
+    db.Workout.find({}).then(data => {
+            res.json(data);
         })
 
         .catch(err => {
@@ -46,11 +46,14 @@ router.get("/api/workouts/range", (req, res) => {
 
 // post route: adds all workouts to the database.   
 router.post("/api/workouts/", (req, res) => {
-    db.Workout.create({
-            exercises: [req.body]
-        })
-        .then(dbWorkout => {
-            res.json(dbWorkout);
+    const newWorkout = new Workout(req.body);
+    newWorkout.workoutDay();
+
+    Workout.create(newWorkout)
+
+
+        .then(data => {
+            res.json(data);
 
         })
 
@@ -62,7 +65,24 @@ router.post("/api/workouts/", (req, res) => {
 
 router.put("/api/workouts/:id", (req, res) => {
 
-})
+    db.Workout.findOneAndUpdate({
+            _id: req.params.id
+        }, {
+            $push: {
+                exercises: req.body
+            }
+        }, {
+            new: true,
+            runValidators: true
+        })
+        .then(data => {
+            res.json(data);
+        })
+        .catch(err => {
+            res.status(400).json(err);
+
+        });
+});
 
 
 
