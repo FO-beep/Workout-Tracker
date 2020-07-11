@@ -52,11 +52,15 @@ const workoutSchema = new Schema({
     }]
 });
 
+workoutSchema.virtual("totalDuration").get(function () {
+    return this.exercises.reduce((total, exercise) => {
+            return total + exercise.duration;
 
-workoutSchema.methods.workoutDay = function () {
-    this.day = Date.now();
-    return this.day;
-}
+        },
+        0);
+})
+
+
 
 const Workout = mongoose.model("Workout", workoutSchema);
 

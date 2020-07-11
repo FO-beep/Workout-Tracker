@@ -34,7 +34,8 @@ router.get("/api/workouts", (req, res) => {
 
 // this collects/retrieves all workouts within a range from the dattabase.
 router.get("/api/workouts/range", (req, res) => {
-    db.Workout.find({}).then(data => {
+    db.Workout.find({}).limit(7)
+        .then(data => {
             res.json(data);
         })
 
@@ -49,7 +50,7 @@ router.post("/api/workouts/", (req, res) => {
     const newWorkout = new Workout(req.body);
     newWorkout.workoutDay();
 
-    Workout.create(newWorkout)
+    db.Workout.create(newWorkout)
 
 
         .then(data => {
